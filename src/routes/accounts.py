@@ -333,13 +333,6 @@ async def reset_password_complete(
     reset_token = result.scalar_one_or_none()
 
     if not reset_token:
-        # Видалити всі токени користувача, якщо токен не знайдено
-        await db.execute(
-            delete(PasswordResetTokenModel).where(
-                PasswordResetTokenModel.user_id == user.id
-            )
-        )
-        await db.commit()
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid email or token."
